@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
+import { StripeModule } from '../stripe/stripe.module';
 
 
 
@@ -10,6 +11,7 @@ import { HomeComponent } from './home/home.component';
   ],
   imports: [
     CommonModule,
+    StripeModule
   ],
   exports: [HomeComponent]
 })
