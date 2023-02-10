@@ -1,15 +1,18 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StripeProductTableComponent } from './stripe-product-table/stripe-product-table.component';
+const components = [
+  StripeProductTableComponent
+];
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    StripeProductTableComponent,
+    ...components
   ],
   imports: [
     CommonModule
   ],
-  exports: [StripeProductsComponent]
+  exports: [...components]
 })
 export class StripeModule { }
