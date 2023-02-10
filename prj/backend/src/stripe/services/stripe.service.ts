@@ -21,6 +21,8 @@ export class StripeService {
         description: x.description,
         images: x.images,
         name: x.name,
+        priceId:
+          (x.default_price as Stripe.Price).id ?? (x.default_price as string),
       };
     });
   }
@@ -32,6 +34,36 @@ export class StripeService {
     const session = await this.client.billingPortal.sessions.create({
       customer,
       return_url: returnUrl,
+    });
+
+    return session.url;
+  }
+
+  public async getCheckoutUrl(
+    customerId: string,
+    returnUrl: string,
+    priceId: string,
+  ): Promise<string> {
+    const session = await this.client.checkout.sessions.create({
+      cancel_url: returnUrl ?? '',
+      success_url: returnUrl ?? '',
+      mode: 'payment',
+      customer: customerId,
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      tax_id_collection: {
+        enabled: false,
+      },
+      billing_address_collection: 'required',
+      customer_update: {
+        address: 'auto',
+        shipping: 'auto',
+        name: 'auto',
+      },
     });
 
     return session.url;
