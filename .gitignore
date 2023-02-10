@@ -272,3 +272,4 @@ Build.lnk
 docs/presskit
 *.lnk
 *.env
+prj/frontend/.angular
