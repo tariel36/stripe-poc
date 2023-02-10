@@ -1,0 +1,8 @@
+<div class="container">
+    <app-stripe-product-item
+        *ngFor="let item of products;"
+        [name]="item.name"
+        [image]="item.images[0]"
+        [description]="item.description"
+    ></app-stripe-product-item>
+</div>
