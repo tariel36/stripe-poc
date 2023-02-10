@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../material/material.module';
 import { HttpClientModule } from '@angular/common/http';
+import { StripeModule } from '../stripe/stripe.module';
 import { HomeModule } from '../home/home.module';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { HomeModule } from '../home/home.module';
         BrowserAnimationsModule,
         MaterialModule,
         HttpClientModule,
+        StripeModule,
         HomeModule
     ],
     providers: [],

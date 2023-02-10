@@ -2,7 +2,8 @@
     <div class="clickable"><span>{{title}}</span></div>
     <span class="navigation-spacer"></span>
     <button mat-button routerLink="/home">Home</button>
-    <button mat-button>Stripe Client Panel</button>
+    <button mat-button (click)="openCustomerPortalLazy()">Lazy Stripe Client Panel</button>
+    <button mat-button (click)="openCustomerPortalApi()">API Stripe Client Panel</button>
     <button mat-button routerLink="/stripe-products">Stripe Products</button>
     <button mat-button routerLink="/stripe-product-table">Stripe Products Table</button>
     <!-- <button mat-button routerLink="/first-component"></button> -->

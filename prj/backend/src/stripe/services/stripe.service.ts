@@ -24,4 +24,16 @@ export class StripeService {
       };
     });
   }
+
+  public async getCustomerPortal(
+    customer: string,
+    returnUrl: string,
+  ): Promise<string> {
+    const session = await this.client.billingPortal.sessions.create({
+      customer,
+      return_url: returnUrl,
+    });
+
+    return session.url;
+  }
 }
