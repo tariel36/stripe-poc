@@ -18,10 +18,25 @@ export class BackendService {
         `${this.url}/customerPortal`,
         {
           customer: environment.customerId,
-          return_url: environment.currentUrl,
+          returnUrl: environment.currentUrl,
         },
         { responseType: "text" }
       )
       .toPromise();
   }
+
+  public async getCheckout(priceId: string): Promise<string> {
+    return await this.httpClient
+      .post(
+        `${this.url}/checkout`,
+        {
+          customer: environment.customerId,
+          returnUrl: environment.currentUrl,
+          priceId
+        },
+        { responseType: "text" }
+      )
+      .toPromise();
+  }
+
 }
