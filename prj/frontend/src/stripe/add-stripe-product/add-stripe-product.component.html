@@ -1,0 +1,25 @@
+<div class="wrapper">
+  <div *ngIf="isLoading" class="loading-container">
+    <div>
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </div>
+  </div>
+  <div class="container" *ngIf="!isLoading">
+    <form class="w-100">
+      <mat-form-field *ngFor="let item of formItems;" class="w-100">
+        <mat-label>{{item.label}}</mat-label>
+        <input [type]="item.type" matInput [formControl]="item.control" />
+        <mat-hint *ngIf="item.hint">{{item.hint}}</mat-hint>
+      </mat-form-field>
+    </form>
+    <button
+      mat-flat-button
+      color="primary"
+      class="w-100"
+      (click)="onSaveClick()"
+    >
+      Save
+    </button>
+  </div>
+</div>

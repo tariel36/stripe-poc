@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { LocalStorageKey } from "../../local-storage/models/local-storage-key";
+import { ICreateProductArgs } from "../../stripe/models/create-product-args.interface";
 import { ICustomer } from "../../stripe/models/customer.interface";
 
 @Injectable()
@@ -23,6 +24,15 @@ export class BackendService {
     .post(
       `${this.url}/customer/create`,
       customer,
+    )
+    .toPromise();
+  }
+
+  public async createProduct(product: ICreateProductArgs): Promise<any> {
+    return await this.httpClient
+    .post(
+      `${this.url}/product/create`,
+      product,
     )
     .toPromise();
   }

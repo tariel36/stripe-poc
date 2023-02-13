@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ICreateProductArgs } from '../models/create-product-args.interface';
 import { ICustomer } from '../models/customer.interface';
 import { IProduct } from '../models/product.interface';
 import { StripeService } from '../services/stripe.service';
@@ -15,6 +16,13 @@ export class StripeController {
   @Get('customers')
   public async getCustomers(): Promise<ICustomer[]> {
     return await this.stripeService.getAllCustomers();
+  }
+
+  @Post('product/create')
+  public async postProductCreate(
+    @Body() args: ICreateProductArgs,
+  ): Promise<IProduct> {
+    return await this.stripeService.createProduct(args);
   }
 
   @Post('customer/create')

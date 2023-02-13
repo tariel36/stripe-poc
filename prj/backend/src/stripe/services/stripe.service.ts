@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { first } from '../../utility/functions';
+import { ICreateProductArgs } from '../models/create-product-args.interface';
 import { ICustomer } from '../models/customer.interface';
 import { IProduct } from '../models/product.interface';
+import { readFileSync } from 'fs';
 
 @Injectable()
 export class StripeService {
@@ -22,29 +24,7 @@ export class StripeService {
         expand: ['data.default_price', 'data.default_price.currency_options'],
       })
     ).data.map((x) => {
-      const price = x.default_price as Stripe.Price;
-
-      return {
-        id: x.id,
-        description: x.description,
-        image: x.images?.find(first),
-        name: x.name,
-        priceId: price.id,
-        prices: Object.keys(price.currency_options ?? {}).map((y) => {
-          return {
-            currency: y.toUpperCase(),
-            value: Intl.NumberFormat(undefined, {
-              style: 'decimal',
-              currency: y.toUpperCase(),
-            }).format(
-              +this.getFormattedValue(
-                y.toUpperCase(),
-                price.currency_options[y].unit_amount_decimal,
-              ),
-            ),
-          };
-        }),
-      };
+      return this.toProduct(x);
     });
   }
 
@@ -120,6 +100,84 @@ export class StripeService {
     return session.url;
   }
 
+  public async createProduct(args: ICreateProductArgs): Promise<IProduct> {
+    const {
+      name,
+      description,
+      height,
+      length,
+      weight,
+      width,
+      externalId,
+      currency,
+      value,
+    } = args;
+
+    let { image, shippable } = args;
+
+    if (image && !image.startsWith('http')) {
+      image = (await this.uploadImage(image))?.links?.data?.find(first)?.url;
+    }
+
+    if (typeof args.shippable === 'string') {
+      shippable = args.shippable === 'true';
+    }
+
+    const currency_options = (args.currencies ?? []).reduce((prev, curr) => {
+      const currencyValue = this.toDecimal(curr.value);
+
+      prev[curr.currency.toLowerCase()] = {
+        unit_amount_decimal: currencyValue,
+      };
+
+      return prev;
+    }, {});
+
+    const stripeObj = {
+      name,
+      description,
+      shippable,
+      package_dimensions: shippable
+        ? {
+            height,
+            length,
+            weight,
+            width,
+          }
+        : undefined,
+      metadata: {
+        externalId,
+      },
+      images: image ? [image] : [],
+      default_price_data: {
+        currency,
+        unit_amount_decimal: this.toDecimal(value),
+        currency_options,
+      },
+    };
+
+    const product = await this.client.products.create(stripeObj);
+
+    return this.toProduct(product);
+  }
+
+  public async uploadImage(path: string): Promise<Stripe.File> {
+    const img = await this.client.files.create({
+      file: {
+        data: readFileSync(path),
+        name: path.split('\\').pop(),
+        type: 'application.octet-stream',
+      },
+      // This is undocumented in the API but used in Stripe's dashboard's API call.
+      purpose: 'product_image',
+      file_link_data: {
+        create: true,
+      },
+    });
+
+    return img;
+  }
+
   private getFormattedValue(currency: string, decimalValue: string): string {
     // Stripe always returns values in lowest possible unit for currencies.
     // So we need to format it to proper value, so for 0-len we get value, for 2-len we get value/100
@@ -158,5 +216,35 @@ export class StripeService {
     }
 
     return `${+decimalValue / 100}`;
+  }
+
+  private toDecimal(value: string): string {
+    return value.replace(/\.|,/gi, '');
+  }
+
+  private toProduct(stripeProduct: Stripe.Product): IProduct {
+    const price = stripeProduct.default_price as Stripe.Price;
+
+    return {
+      id: stripeProduct.id,
+      description: stripeProduct.description,
+      image: stripeProduct.images?.find(first),
+      name: stripeProduct.name,
+      priceId: price.id,
+      prices: Object.keys(price.currency_options ?? {}).map((y) => {
+        return {
+          currency: y.toUpperCase(),
+          value: Intl.NumberFormat(undefined, {
+            style: 'decimal',
+            currency: y.toUpperCase(),
+          }).format(
+            +this.getFormattedValue(
+              y.toUpperCase(),
+              price.currency_options[y].unit_amount_decimal,
+            ),
+          ),
+        };
+      }),
+    };
   }
 }
