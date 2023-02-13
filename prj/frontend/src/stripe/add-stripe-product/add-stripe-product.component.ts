@@ -39,7 +39,7 @@ export class AddStripeProductComponent {
         prev[curr.label] = curr.control.value;
 
         return prev;
-      }, { currencies: {} }) as any;
+      }, { currencies: [] }) as any;
 
     const currencies = this.formItems.find(x => x.label == 'currencies')!.control.value;
 
