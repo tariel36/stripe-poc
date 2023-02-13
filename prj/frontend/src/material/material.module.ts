@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const material = [
     MatToolbarModule,
@@ -20,7 +21,9 @@ const material = [
     MatTableModule,
     MatDialogModule,
     MatCheckboxModule,
-    ClipboardModule
+    ClipboardModule,
+    FormsModule,
+    ReactiveFormsModule
 ];
 
 @NgModule({
