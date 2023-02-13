@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
+import { LocalStorageKey } from "../../local-storage/models/local-storage-key";
 import { ICustomer } from "../../stripe/models/customer.interface";
 
 @Injectable()
@@ -31,7 +32,7 @@ export class BackendService {
       .post(
         `${this.url}/customerPortal`,
         {
-          customer: environment.customerId,
+          customer: this.getUser().stripeId,
           returnUrl: environment.currentUrl,
         },
         { responseType: "text" }
@@ -44,7 +45,7 @@ export class BackendService {
       .post(
         `${this.url}/checkout`,
         {
-          customer: environment.customerId,
+          customer: this.getUser().stripeId,
           returnUrl: environment.currentUrl,
           priceId
         },
@@ -53,4 +54,7 @@ export class BackendService {
       .toPromise();
   }
 
+  private getUser(): ICustomer {
+    return JSON.parse(localStorage.getItem(LocalStorageKey.Customer)) as ICustomer;
+  }
 }
