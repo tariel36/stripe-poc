@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
+import { first } from '../../utility/functions';
 import { IProduct } from '../models/product.interface';
 
 @Injectable()
@@ -19,7 +20,7 @@ export class StripeService {
       return {
         id: x.id,
         description: x.description,
-        images: x.images,
+        image: x.images?.find(first),
         name: x.name,
         priceId:
           (x.default_price as Stripe.Price).id ?? (x.default_price as string),

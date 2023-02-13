@@ -3,7 +3,14 @@
 }
 
 .outlet {
-    padding: 5px;
+    height: calc(100vh - 90px);
+    padding: 5px 0px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.outlet::-webkit-scrollbar {
+    width: 0px;
 }
 
 .random-button {

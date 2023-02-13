@@ -2,7 +2,7 @@
     <app-stripe-product-item
         *ngFor="let item of products;"
         [name]="item.name"
-        [image]="item.images[0]"
+        [image]="item.image"
         [description]="item.description"
         [priceId]="item.priceId"
     ></app-stripe-product-item>
