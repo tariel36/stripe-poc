@@ -1,8 +1,14 @@
-
-<stripe-pricing-table pricing-table-id="prctbl_1MZoHRAaS1ccnsswX8ZTxMO5"
-publishable-key="pk_test_51MZkHpAaS1ccnsswqrv9l2CcY2b9wwsQiStB0cFoCxdIJTadbOomtPutDRwQkWVcZ2AhN6GN72DgiHEQG4cuNhv8008yWo2vwh">
-</stripe-pricing-table>
-
-<stripe-pricing-table pricing-table-id="prctbl_1MZq3IAaS1ccnssw4YJvut7E"
-publishable-key="pk_test_51MZkHpAaS1ccnsswqrv9l2CcY2b9wwsQiStB0cFoCxdIJTadbOomtPutDRwQkWVcZ2AhN6GN72DgiHEQG4cuNhv8008yWo2vwh">
-</stripe-pricing-table>
+<ng-container *ngIf="!isLoading">
+  <stripe-pricing-table
+    pricing-table-id="prctbl_1MZoHRAaS1ccnsswX8ZTxMO5"
+    publishable-key="pk_test_51MZkHpAaS1ccnsswqrv9l2CcY2b9wwsQiStB0cFoCxdIJTadbOomtPutDRwQkWVcZ2AhN6GN72DgiHEQG4cuNhv8008yWo2vwh"
+    customer-email="{{ customerEmail }}"
+  >
+  </stripe-pricing-table>
+  <stripe-pricing-table
+    pricing-table-id="prctbl_1MZq3IAaS1ccnssw4YJvut7E"
+    publishable-key="pk_test_51MZkHpAaS1ccnsswqrv9l2CcY2b9wwsQiStB0cFoCxdIJTadbOomtPutDRwQkWVcZ2AhN6GN72DgiHEQG4cuNhv8008yWo2vwh"
+    customer-email="{{ customerEmail }}"
+  >
+  </stripe-pricing-table>
+</ng-container>
