@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { first } from '../../utility/functions';
+import { ICustomer } from '../models/customer.interface';
 import { IProduct } from '../models/product.interface';
 
 @Injectable()
@@ -24,6 +25,33 @@ export class StripeService {
         name: x.name,
         priceId:
           (x.default_price as Stripe.Price).id ?? (x.default_price as string),
+      };
+    });
+  }
+
+  public async createCustomer(customer: ICustomer): Promise<ICustomer> {
+    const stripeCustomer = await this.client.customers.create({
+      email: customer.email,
+      metadata: {
+        id: customer.externalId,
+      },
+    });
+
+    return {
+      email: stripeCustomer.email,
+      externalId: stripeCustomer.metadata.id ?? 'n/a',
+      stripeId: stripeCustomer.id,
+      name: stripeCustomer.name,
+    };
+  }
+
+  public async getAllCustomers(): Promise<ICustomer[]> {
+    return (await this.client.customers.list()).data.map((x) => {
+      return {
+        email: x.email,
+        externalId: x.metadata.id ?? 'n/a',
+        stripeId: x.id,
+        name: x.name,
       };
     });
   }
