@@ -5,10 +5,24 @@ import { ICreateProductArgs } from '../models/create-product-args.interface';
 import { ICustomer } from '../models/customer.interface';
 import { IProduct } from '../models/product.interface';
 import { readFileSync } from 'fs';
+import {
+  StripeEventHandler,
+  IOnEventContext,
+} from '../models/stripe-event-handler';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class StripeService {
   private readonly client: Stripe;
+
+  private readonly webHookSecret = process.env.STRIPE_API_WEBHOOK_SECRET;
+
+  private supportedEvents = new Map<string, StripeEventHandler>(
+    [
+      new StripeEventHandler('invoice.paid', (x) => this.onInvoicePaid(x)),
+      // new StripeEventHandler('invoice.payment_failed', (x) => this.onPaymentFailed(x)),
+    ].map((handler) => [handler.type, handler]),
+  );
 
   constructor() {
     const secret = process.env.STRIPE_API_SECRET;
@@ -16,6 +30,23 @@ export class StripeService {
     this.client = new Stripe(secret, {
       apiVersion: '2022-11-15',
     });
+  }
+
+  public async handleWebHookEvent(req: Request, res: Response): Promise<void> {
+    const event = await this.ensureSignedEvent(req, res);
+
+    if (!event) {
+      throw new Error('Invalid event.');
+    }
+
+    const handler = this.supportedEvents.get(event.type);
+
+    if (!handler) {
+      res.status(200).end();
+      return;
+    }
+
+    await handler.delegate({ event, req, res });
   }
 
   public async getAllProducts(): Promise<IProduct[]> {
@@ -246,5 +277,36 @@ export class StripeService {
         };
       }),
     };
+  }
+
+  private getSignedEvent(
+    body: any,
+    signature: string | undefined,
+  ): Stripe.Event | null {
+    if (!this.webHookSecret) {
+      return body as Stripe.Event;
+    }
+
+    return this.client.webhooks.constructEvent(
+      body,
+      signature,
+      this.webHookSecret,
+    );
+  }
+
+  private async ensureSignedEvent(
+    req: Request,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    res: Response,
+  ): Promise<Stripe.Event | null> {
+    const sig = req.headers['stripe-signature'] as string | undefined;
+    const body = req.body;
+
+    return this.getSignedEvent(body, sig);
+  }
+
+  private async onInvoicePaid(ctx: IOnEventContext): Promise<void> {
+    console.log('PAID', ctx.event);
+    ctx.res.status(200).end();
   }
 }

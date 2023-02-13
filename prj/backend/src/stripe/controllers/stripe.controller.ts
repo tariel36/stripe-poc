@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ICreateProductArgs } from '../models/create-product-args.interface';
 import { ICustomer } from '../models/customer.interface';
 import { IProduct } from '../models/product.interface';
 import { StripeService } from '../services/stripe.service';
+import { Request, Response } from 'express';
 
 @Controller('stripe')
 export class StripeController {
@@ -49,5 +50,13 @@ export class StripeController {
       args.returnUrl,
       args.priceId,
     );
+  }
+
+  @Post('webhook')
+  public async postWebhook(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.stripeService.handleWebHookEvent(req, res);
   }
 }
