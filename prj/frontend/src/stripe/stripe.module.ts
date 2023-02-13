@@ -5,11 +5,14 @@ import { StripeProductTableComponent } from './stripe-product-table/stripe-produ
 import { StripeProductItemComponent } from './stripe-product-item/stripe-product-item.component';
 import { BackendModule } from '../backend/backend.module';
 import { MaterialModule } from '../material/material.module';
+import { StripeCustomerListComponent } from './stripe-customer-list/stripe-customer-list.component';
 
 const components = [
   StripeProductTableComponent,
   StripeProductsComponent,
-  StripeProductItemComponent
+  StripeProductItemComponent,
+  StripeCustomerListComponent,
+
 ];
 
 @NgModule({

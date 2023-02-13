@@ -1,0 +1,55 @@
+.loading-container {
+    width: 100%;
+    height: 467px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 512px;
+    height: fit-content;
+}
+
+.customer-list {
+    height: 333px;
+    overflow-y: scroll;
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.customer-list::-webkit-scrollbar {
+    width: 0px;
+}
+
+.customer {
+    width: 100%;
+    height: fit-content;
+}
+
+.customer-inner {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.customer-inner > p {
+    margin: 0px;
+    padding: 0px;
+    font-size: small;
+}
+
+.customer-form {
+    padding: 5px;
+}

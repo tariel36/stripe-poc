@@ -1,0 +1,36 @@
+<div class="wrapper">
+    <div class="container mat-elevation-z8">
+        <div *ngIf="isLoading" class="loading-container">
+            <div>
+                <mat-progress-spinner color="primary" mode="indeterminate">
+                </mat-progress-spinner>
+            </div>
+        </div>
+        <div *ngIf="!isLoading" class="customer-list">
+            <button mat-flat-button color="primary" *ngFor="let item of customers" class="customer" (click)="onCustomerClick(item)">
+                <div class="customer-inner">
+                    <p>{{item.email}}</p>
+                    <p>{{item.stripeId}}&nbsp;{{item.externalId}}</p>
+                    <p>{{item.name}}</p>
+                </div>
+            </button>
+        </div>
+        <div *ngIf="!isLoading" class="customer-form">
+            <form class="w-100">
+                <mat-form-field class="w-100">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                    Please enter a valid email address.
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Email is <strong>required</strong>.
+                  </mat-error>
+                </mat-form-field>
+            </form>
+            <button mat-flat-button color="primary" class="w-100" (click)="onLoginClick()">
+                Login
+            </button>
+        </div>
+    </div>
+</div>
