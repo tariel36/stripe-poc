@@ -20,7 +20,7 @@ import { HomeModule } from '../home/home.module';
         MaterialModule,
         HttpClientModule,
         StripeModule,
-        HomeModule
+        HomeModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
