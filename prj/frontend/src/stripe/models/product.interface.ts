@@ -4,4 +4,8 @@ export interface IProduct {
   image: string;
   name: string;
   priceId: string;
+  prices: {
+    currency: string;
+    value: string;
+  }[];
 }

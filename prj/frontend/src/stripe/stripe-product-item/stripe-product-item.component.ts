@@ -13,6 +13,7 @@ export class StripeProductItemComponent {
   @Input() public image: string;
   @Input() public priceId: string;
   @Input() public type: string = 'TYPE';
+  @Input() public prices: { currency: string, value: string }[];
 
   constructor(private readonly backendService: BackendService) {
 

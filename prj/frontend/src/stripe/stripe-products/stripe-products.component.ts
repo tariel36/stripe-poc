@@ -17,7 +17,6 @@ export class StripeProductsComponent implements OnInit {
   public ngOnInit(): void {
     this.backendService.getProducts()
       .then(x => {
-        console.log(x);
         this.products = x;
       });
   }

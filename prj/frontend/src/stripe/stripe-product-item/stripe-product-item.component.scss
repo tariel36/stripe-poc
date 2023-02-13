@@ -1,6 +1,6 @@
 .container {
   width: 405px;
-  height: 421px;
+  height: 441px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -44,3 +44,16 @@
 .action-button {
   width: 77px;
 }
+
+.prices {
+  padding: 5px;
+  display: flex;
+  gap: 5px;
+}
+
+.price-button {
+  min-width: 67px;
+  height: 27px;
+  cursor: default;
+}
+

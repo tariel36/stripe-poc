@@ -18,4 +18,7 @@
   <div class="buttons">
     <button class="action-button" mat-flat-button color="primary" (click)="buy()">BUY</button>
   </div>
+  <div class="prices">
+    <button *ngFor="let price of prices;" class="price-button" mat-flat-button color="primary">{{price.value}}&nbsp;{{price.currency}}</button>
+  </div>
 </div>

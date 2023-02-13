@@ -17,14 +17,33 @@ export class StripeService {
   }
 
   public async getAllProducts(): Promise<IProduct[]> {
-    return (await this.client.products.list()).data.map((x) => {
+    return (
+      await this.client.products.list({
+        expand: ['data.default_price', 'data.default_price.currency_options'],
+      })
+    ).data.map((x) => {
+      const price = x.default_price as Stripe.Price;
+
       return {
         id: x.id,
         description: x.description,
         image: x.images?.find(first),
         name: x.name,
-        priceId:
-          (x.default_price as Stripe.Price).id ?? (x.default_price as string),
+        priceId: price.id,
+        prices: Object.keys(price.currency_options ?? {}).map((y) => {
+          return {
+            currency: y.toUpperCase(),
+            value: Intl.NumberFormat(undefined, {
+              style: 'decimal',
+              currency: y.toUpperCase(),
+            }).format(
+              +this.getFormattedValue(
+                y.toUpperCase(),
+                price.currency_options[y].unit_amount_decimal,
+              ),
+            ),
+          };
+        }),
       };
     });
   }
@@ -93,8 +112,51 @@ export class StripeService {
         shipping: 'auto',
         name: 'auto',
       },
+      invoice_creation: {
+        enabled: true,
+      },
     });
 
     return session.url;
+  }
+
+  private getFormattedValue(currency: string, decimalValue: string): string {
+    // Stripe always returns values in lowest possible unit for currencies.
+    // So we need to format it to proper value, so for 0-len we get value, for 2-len we get value/100
+    // and so on.
+    // https://stripe.com/docs/currencies#zero-decimal
+
+    const threeLen = ['BHD', 'JOD', 'KWD', 'OMR', 'TND'];
+    const special = ['TWD', 'HUF', 'UGX'];
+    const zeroLen = [
+      'BIF',
+      'CLP',
+      'DJF',
+      'GNF',
+      'JPY',
+      'KMF',
+      'KRW',
+      'MGA',
+      'PYG',
+      'RWF',
+      'UGX',
+      'VND',
+      'VUV',
+      'XAF',
+      'XOF',
+      'XPF',
+    ];
+
+    if (zeroLen.includes(currency)) {
+      return decimalValue;
+    }
+
+    if (threeLen.includes(currency) || special.includes(currency)) {
+      throw new Error(
+        `tl;dr docs, special support needed for currency '${currency}'`,
+      );
+    }
+
+    return `${+decimalValue / 100}`;
   }
 }
