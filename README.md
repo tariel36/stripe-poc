@@ -18,3 +18,10 @@ This Stripe PoC has following features:
 1. Listen to events - `stripe listen --events invoice.paid --forward-to localhost:4300/stripe/webhook`
 
 Refer to [https://stripe.com/docs/webhooks](https://stripe.com/docs/webhooks) if needed.
+
+## Test Stripe payments
+
+To successfully finish card payment, use `4242 4242 4242 4242` card number, any future date for expiration date and any number for CVC.
+Address data or names doesn't matter.
+
+See more [https://stripe.com/docs/testing](https://stripe.com/docs/testing).
