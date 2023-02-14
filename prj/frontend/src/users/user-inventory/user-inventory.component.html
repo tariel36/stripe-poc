@@ -1,0 +1,36 @@
+<div>
+  <div *ngIf="isLoading" class="loading-container">
+    <div>
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </div>
+  </div>
+  <div *ngIf="!isLoading">
+    <div class="currency-container">
+      <div class="currency">
+        <img src="assets/fp.png" />
+        <span>{{ inventory.freemium }}</span>
+      </div>
+      <div class="currency">
+        <img src="assets/rp.png" />
+        <span>{{ inventory.premium }}</span>
+      </div>
+    </div>
+    <div>
+      <div *ngFor="let item of products" class="skin-container mat-elevation-z8">
+        <div class="skin-header">
+          <p class="skin-title">{{ item.name }}</p>
+          <!-- <p class="skin-subtitle">{{ item.type }}</p> -->
+        </div>
+        <div class="skin-image-container">
+          <img class="skin-image" mat-card-image [src]="item.image" />
+        </div>
+        <div class="skin-description">
+          <p>
+            {{ item.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

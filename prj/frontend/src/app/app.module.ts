@@ -8,6 +8,7 @@ import { MaterialModule } from '../material/material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { StripeModule } from '../stripe/stripe.module';
 import { HomeModule } from '../home/home.module';
+import { UsersModule } from '../users/users.module';
 
 @NgModule({
     declarations: [
@@ -21,6 +22,7 @@ import { HomeModule } from '../home/home.module';
         HttpClientModule,
         StripeModule,
         HomeModule,
+        UsersModule
     ],
     providers: [],
     bootstrap: [AppComponent]

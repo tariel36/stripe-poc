@@ -4,12 +4,14 @@ import { HomeComponent } from "../home/home/home.component";
 import { AddStripeProductComponent } from "../stripe/add-stripe-product/add-stripe-product.component";
 import { StripeProductTableComponent } from "../stripe/stripe-product-table/stripe-product-table.component";
 import { StripeProductsComponent } from "../stripe/stripe-products/stripe-products.component";
+import { UserInventoryComponent } from "../users/user-inventory/user-inventory.component";
 
 export enum Paths {
   home = "home",
   addStripeProduct = "add-stripe-product",
   stripeProducts = "stripe-products",
   stripeProductTable = "stripe-product-table",
+  userInventory = "user-inventory",
 }
 
 const routes: Routes = [
@@ -17,6 +19,7 @@ const routes: Routes = [
   { path: Paths.addStripeProduct, component: AddStripeProductComponent },
   { path: Paths.stripeProducts, component: StripeProductsComponent },
   { path: Paths.stripeProductTable, component: StripeProductTableComponent },
+  { path: Paths.userInventory, component: UserInventoryComponent },
   { path: "**", component: HomeComponent },
 ];
 
