@@ -259,6 +259,7 @@ export class StripeService {
 
     return {
       id: stripeProduct.id,
+      externalId: stripeProduct.metadata.externalId,
       description: stripeProduct.description,
       image: stripeProduct.images?.find(first),
       name: stripeProduct.name,
@@ -325,7 +326,12 @@ export class StripeService {
       .map((x) => x.metadata)
       .forEach((x) => {
         if (x.externalId) {
-          this.userService.addSkin(userId, x.externalId);
+          x.externalId
+            .split(',')
+            .map((y) => y.trim())
+            .forEach((y) => {
+              this.userService.addSkin(userId, y);
+            });
         } else if (x.rp) {
           this.userService.addPremiumCurrency(userId, +x.rp);
         }

@@ -8,7 +8,7 @@ export class UserController {
 
   @Get('inventory/:userId')
   public async getUserInventory(
-    @Param() userId: string,
+    @Param('userId') userId: string,
   ): Promise<IUserInventory> {
     return await this.userService.getUserInventory(userId);
   }
