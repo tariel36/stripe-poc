@@ -70,7 +70,7 @@ export class StripeService {
 
     return {
       email: stripeCustomer.email,
-      externalId: stripeCustomer.metadata.id ?? 'n/a',
+      externalId: stripeCustomer.metadata.userId ?? 'n/a',
       stripeId: stripeCustomer.id,
       name: stripeCustomer.name,
     };
@@ -80,7 +80,7 @@ export class StripeService {
     return (await this.client.customers.list()).data.map((x) => {
       return {
         email: x.email,
-        externalId: x.metadata.id ?? 'n/a',
+        externalId: x.metadata.userId ?? 'n/a',
         stripeId: x.id,
         name: x.name,
       };

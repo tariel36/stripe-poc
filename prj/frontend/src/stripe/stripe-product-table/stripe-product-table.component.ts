@@ -1,4 +1,5 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { BackendService } from '../../backend/services/backend.service';
 import { LocalStorageKey } from '../../local-storage/models/local-storage-key';
 import { ICustomer } from '../models/customer.interface';
 
@@ -12,12 +13,12 @@ export class StripeProductTableComponent implements OnInit, AfterContentInit {
 
   public customerEmail = '';
 
-  constructor() {
+  constructor(private readonly backendService: BackendService) {
 
   }
 
   public ngOnInit(): void {
-    this.customerEmail = (JSON.parse(localStorage.getItem(LocalStorageKey.Customer)) as ICustomer).email;
+    this.customerEmail = this.backendService.getUser().email;
     console.log('ngOnInit')
   }
 

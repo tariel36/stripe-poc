@@ -56,7 +56,7 @@ export class StripeCustomerListComponent implements OnInit {
   }
 
   private login(customer: ICustomer): void {
-    localStorage.setItem(LocalStorageKey.Customer, JSON.stringify(customer));
+    this.backendService.setUser(customer);
     this.router.navigate([Paths.stripeProducts]);
   }
 }
