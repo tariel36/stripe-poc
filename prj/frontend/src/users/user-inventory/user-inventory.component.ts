@@ -28,7 +28,7 @@ export class UserInventoryComponent implements OnInit {
     ])
     .then((value: [IProduct[], IUserInventory]) => {
       this.inventory = value[1];
-      this.products = value[0].filter(x => this.inventory.skins.includes(x.id));
+      this.products = value[0].filter(x => this.inventory.skins.includes(x.externalId));
     })
     .finally(() => {
       this.isLoading = false;

@@ -6,6 +6,12 @@
   align-items: center;
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
 .currency-container {
   display: flex;
   flex-direction: column;
@@ -20,13 +26,23 @@
   flex-direction: row;
   align-content: center;
   align-items: center;
-  justify-content: center;
-  justify-items: center;
   gap: 10px;
 
   > img {
     height: 100%;
   }
+}
+
+.skins-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.skins-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .skin {

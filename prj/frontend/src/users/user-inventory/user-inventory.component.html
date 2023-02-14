@@ -5,8 +5,9 @@
       </mat-progress-spinner>
     </div>
   </div>
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading" class="container">
     <div class="currency-container">
+      <h2>Currency</h2>
       <div class="currency">
         <img src="assets/fp.png" />
         <span>{{ inventory.freemium }}</span>
@@ -16,19 +17,24 @@
         <span>{{ inventory.premium }}</span>
       </div>
     </div>
-    <div>
-      <div *ngFor="let item of products" class="skin-container mat-elevation-z8">
-        <div class="skin-header">
-          <p class="skin-title">{{ item.name }}</p>
-          <!-- <p class="skin-subtitle">{{ item.type }}</p> -->
-        </div>
-        <div class="skin-image-container">
-          <img class="skin-image" mat-card-image [src]="item.image" />
-        </div>
-        <div class="skin-description">
-          <p>
-            {{ item.description }}
-          </p>
+    <div class="skins-wrapper">
+      <h2>Skins</h2>
+      <div class="skins-container">
+        <div
+          *ngFor="let item of products"
+          class="skin-container mat-elevation-z8"
+        >
+          <div class="skin-header">
+            <p class="skin-title">{{ item.name }}</p>
+          </div>
+          <div class="skin-image-container">
+            <img class="skin-image" mat-card-image [src]="item.image" />
+          </div>
+          <div class="skin-description">
+            <p>
+              {{ item.description }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
