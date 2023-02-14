@@ -332,7 +332,9 @@ export class StripeService {
             .forEach((y) => {
               this.userService.addSkin(userId, y);
             });
-        } else if (x.rp) {
+        }
+
+        if (x.rp) {
           this.userService.addPremiumCurrency(userId, +x.rp);
         }
       });
