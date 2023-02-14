@@ -10,6 +10,7 @@ import {
   IOnEventContext,
 } from '../models/stripe-event-handler';
 import { Request, Response } from 'express';
+import { UserService } from '../../users/services/user.service';
 
 @Injectable()
 export class StripeService {
@@ -24,7 +25,7 @@ export class StripeService {
     ].map((handler) => [handler.type, handler]),
   );
 
-  constructor() {
+  constructor(private readonly userService: UserService) {
     const secret = process.env.STRIPE_API_SECRET;
 
     this.client = new Stripe(secret, {
@@ -63,7 +64,7 @@ export class StripeService {
     const stripeCustomer = await this.client.customers.create({
       email: customer.email,
       metadata: {
-        id: customer.externalId,
+        userId: customer.externalId,
       },
     });
 
@@ -306,7 +307,30 @@ export class StripeService {
   }
 
   private async onInvoicePaid(ctx: IOnEventContext): Promise<void> {
-    console.log('PAID', ctx.event);
+    const invoice = ctx.event.data.object as Stripe.Invoice;
+
+    const productIds = invoice.lines.data.map((x) => x.price.product as string);
+
+    const products = await this.client.products.list({
+      ids: productIds,
+    });
+
+    const customer = (await this.client.customers.retrieve(
+      invoice.customer as string,
+    )) as Stripe.Customer;
+
+    const userId = customer.metadata.userId;
+
+    products.data
+      .map((x) => x.metadata)
+      .forEach((x) => {
+        if (x.externalId) {
+          this.userService.addSkin(userId, x.externalId);
+        } else if (x.rp) {
+          this.userService.addPremiumCurrency(userId, +x.rp);
+        }
+      });
+
     ctx.res.status(200).end();
   }
 }
