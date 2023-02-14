@@ -1,10 +1,19 @@
-<div class="container">
+<div class="wrapper">
+  <div *ngIf="isLoading" class="loading-container">
+    <div>
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </div>
+  </div>
+  <div class="container">
     <app-stripe-product-item
-        *ngFor="let item of products;"
-        [name]="item.name"
-        [image]="item.image"
-        [description]="item.description"
-        [priceId]="item.priceId"
-        [prices]="item.prices"
+      *ngFor="let item of products"
+      [name]="item.name"
+      [image]="item.image"
+      [description]="item.description"
+      [priceId]="item.priceId"
+      [prices]="item.prices"
+      [isBought]="isBought(item)"
     ></app-stripe-product-item>
+  </div>
 </div>

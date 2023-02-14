@@ -14,6 +14,7 @@ export class StripeProductItemComponent {
   @Input() public priceId: string;
   @Input() public type: string = 'TYPE';
   @Input() public prices: { currency: string, value: string }[];
+  @Input() public isBought: boolean;
 
   constructor(private readonly backendService: BackendService) {
 
